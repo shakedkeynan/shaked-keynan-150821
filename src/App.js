@@ -1,19 +1,21 @@
 import MyRouter from "./components/myRouter";
 import { setLocation } from './redux/actions';
-import { connect, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 
-const mapDispatchToProps = (dispatch) => ({
-  setLocation: (item) => dispatch(setLocation(item))
-})
 
-function App(props) {
 
+function App() {
+
+  const dispatch = useDispatch();
+
+  const ChangeLocation = item => dispatch(setLocation(item));
   const isOn = useSelector(state => state.isOn);
-  
+
   var darkMode = false;
   useEffect(() => {
-    props.setLocation('tel aviv')
+    ChangeLocation('tel aviv')
   },
     [])
   return (
@@ -23,9 +25,5 @@ function App(props) {
   );
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-
-)(App);
+export default App;
 

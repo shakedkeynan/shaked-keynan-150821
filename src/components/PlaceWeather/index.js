@@ -1,39 +1,29 @@
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import IconButton from '@material-ui/core/IconButton';
-
-
 import { addItem, removeItem } from '../../redux/actions';
 import { useSelector, useDispatch } from 'react-redux';
-import { useState, useEffect } from 'react';
 
 function PlaceWeather(props) {
 
-    const isOn = useSelector(state => state.isOn);
-
     const dispatch = useDispatch();
-
     const addToList = item => dispatch(addItem(item));
     const remomeFromList = item => dispatch(removeItem(item));
-
     const items = useSelector(state => state.list.items);
-    const isfahrenheit = useSelector(state => state.isfahrenheit);
-
-
+    const isfahrenheit = useSelector(state => state.isFahrenheit);
     const isOnFavorite = items && props.location && items.some(item => item.key === props.location.Key);
+
+
 
     if (props.location !== undefined && props.temp !== undefined && props.nextdaystemp !== undefined) {
 
-        var currentUnit = "c";
         const days = props.nextdaystemp.DailyForecasts.map(day => {
             var dt = new Date(day.Date);
             return (
                 <td key={day.EpochDate} style={{ textAlign: 'center', border: '1px solid' }}>
-                    {/* <span> */}
                     <h4>{dt.toString().split(' ')[0]}</h4>
                     <h5>
                         {Number((day.Temperature.Maximum.Value + day.Temperature.Minimum.Value) / 2).toFixed(1)} </h5>
-                    {/* </span> */}
                 </td>
             )
         }
@@ -59,14 +49,13 @@ function PlaceWeather(props) {
                                     <span style={{ width: '30%' }}>
                                         <h4>{props.location.LocalizedName}</h4>
 
-                                        <h5>{!isfahrenheit? props.temp.Temperature.Metric.Value : props.temp.Temperature.Imperial.Value} </h5>
+                                        <h5>{!isfahrenheit ? props.temp.Temperature.Metric.Value : props.temp.Temperature.Imperial.Value} </h5>
                                     </span>
                                     <span style={{ width: '30%', alignSelf: 'center' }}>
                                         <IconButton color="secondary" onClick={() => { toggleFavorites() }}  >
                                             {isOnFavorite ? <FavoriteIcon style={{ width: '2.3rem', height: '2.3rem' }} /> : <FavoriteBorderIcon style={{ width: '2.3rem', height: '2.3rem' }} />}
-                                            {/* <FavoriteBorderIcon style={{ width: '2.3rem', height: '2.3rem' }} /> */}
-
                                         </IconButton>
+
                                     </span>
                                 </div>
                             </th>

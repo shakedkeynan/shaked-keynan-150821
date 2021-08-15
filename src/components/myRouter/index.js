@@ -14,20 +14,12 @@ import { setdarkmode, setisfahrenheit } from '../../redux/actions';
 import SettingsBrightnessIcon from '@material-ui/icons/SettingsBrightness';
 import { RiFahrenheitFill, RiCelsiusFill } from 'react-icons/ri';
 
-
 function MyRouter() {
     const dispatch = useDispatch();
-
     const ChangeDarkMode = isOn => dispatch(setdarkmode(isOn));
-    const isOn = useSelector(state =>{console.log(state);return state.isOn});
-
+    const isOn = useSelector(state => state.isOn);
     const Changeisfahrenheit = isFahrenheit => dispatch(setisfahrenheit(isFahrenheit));
-    const isfahrenheit = useSelector(state => state.isfahrenheit);
-
-const change =()=>{
-    Changeisfahrenheit(!isfahrenheit)
-}
-
+    const isfahrenheit = useSelector(state => state.isFahrenheit);
 
     return (
         <div >
@@ -36,14 +28,14 @@ const change =()=>{
                     <Link to="/">
                         <Button variant="outlined"
                             style={{ border: 'splid 1px ' }}
-                            style={isOn ? { filter: 'invert(1)', border: 'splid 1px ' } : { border: 'splid 1px ' }}
-
-                        >
+                            style={isOn ? { filter: 'invert(1)', border: 'splid 1px ' } :
+                                { border: 'splid 1px ' }}>
                             main
                         </Button>
                     </Link>
                     <Link to="/favorites">
-                        <Button variant="outlined" style={isOn ? { filter: 'invert(1)', border: 'splid 1px ' } : { border: 'splid 1px ' }}>
+                        <Button variant="outlined" style={isOn ? { filter: 'invert(1)', border: 'splid 1px ' } :
+                            { border: 'splid 1px ' }}>
                             favorites
                         </Button>
                     </Link>
@@ -60,15 +52,26 @@ const change =()=>{
 
                 </Switch>
             </Router >
-            <div style={{ marginLeft: '15%' }}>
+            <div style={{ textAlign: 'center' }}>
                 <SettingsBrightnessIcon
                     style={isOn ? { color: 'white', width: '10%', height: '10%' } :
                         { width: '10%', height: '10%' }}
                     onClick={() => { ChangeDarkMode(!isOn) }}></SettingsBrightnessIcon>
-                <button onClick={() => { change() }}> ferenhite </button>
-                <RiFahrenheitFill /> <RiCelsiusFill />
+                <span style={{ marginLeft: '15%' }} />
+                {isfahrenheit ?
+                    <RiFahrenheitFill onClick={() => Changeisfahrenheit(!isfahrenheit)}
+                        style={isOn ? { color: 'white', width: '10%', height: '10%' } :
+                            { width: '10%', height: '10%' }} />
+                    :
+                    <RiCelsiusFill onClick={() => Changeisfahrenheit(!isfahrenheit)}
+                        style={isOn ? { color: 'white', width: '10%', height: '10%' } :
+                            { width: '10%', height: '10%' }}
+                    />}
+
+              
+
+
             </div>
-            {/* <button  >Dark Mode</button> */}
         </div>
     );
 }

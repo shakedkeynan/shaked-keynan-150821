@@ -1,5 +1,6 @@
 import {
     ADD_ITEM,
+    REMOVE_ITEM
 } from '../actions'
 
 const initialState = {
@@ -9,16 +10,30 @@ const initialState = {
 function manageList(state = initialState, action) {
     switch (action.type) {
         case ADD_ITEM:
-            console.log(state)
-            console.log(state.items)
             var isExist = false;
             state.items.forEach(i => {
-                if (i.includes(action.payload[0])) {
+                if (i.key === action.payload.key) {
                     isExist = true;
-
                 }
             })
-            return isExist ? { items: state.items } : { items: [...state.items, action.payload] };
+            return isExist ? { items: [...state.items] } : { items: [...state.items, action.payload] };
+
+        case REMOVE_ITEM:
+            var isExist = false;
+            state.items.forEach(i => {
+                if (i.key === action.payload.key) {
+                    isExist = true;
+                }
+            })
+            if (isExist) {
+                let a = state.items.filter(function (ele) {
+                    return ele.key != action.payload.key;
+                });
+                return { items: a }
+            }
+            else {
+               return { items: state.items }
+            }
 
 
         default:

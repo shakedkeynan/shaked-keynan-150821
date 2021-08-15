@@ -1,27 +1,32 @@
 import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import IconButton from '@material-ui/core/IconButton';
 
 
-import { addItem } from '../../redux/actions';
-import { connect } from 'react-redux';
-
-const mapDispatchToProps = (dispatch) => ({
-    addToList: (item) => dispatch(addItem(item))
-})
-
+import { addItem, removeItem } from '../../redux/actions';
+import { useSelector, useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react';
 
 function PlaceWeather(props) {
 
-    var darkMode = false;
+    const isOn = useSelector(state => state.isOn);
 
+    const dispatch = useDispatch();
+
+    const addToList = item => dispatch(addItem(item));
+    const remomeFromList = item => dispatch(removeItem(item));
+
+    const items = useSelector(state => state.list.items);
+    const isfahrenheit = useSelector(state => state.isfahrenheit);
+
+
+    const isOnFavorite = items && props.location && items.some(item => item.key === props.location.Key);
 
     if (props.location !== undefined && props.temp !== undefined && props.nextdaystemp !== undefined) {
 
         var currentUnit = "c";
-        // console.log(props.nextdaystemp.DailyForecasts)
         const days = props.nextdaystemp.DailyForecasts.map(day => {
             var dt = new Date(day.Date);
-            console.log(day)
             return (
                 <td key={day.EpochDate} style={{ textAlign: 'center', border: '1px solid' }}>
                     {/* <span> */}
@@ -34,12 +39,15 @@ function PlaceWeather(props) {
         }
         );
 
-        const addToFavorites = () => {
-            // console.log(props.location.Key)
-            props.addToList([props.location.Key])
+        const toggleFavorites = () => {
+            if (isOnFavorite) {
+                remomeFromList({ 'key': props.location.Key, 'name': props.location.LocalizedName })
+            }
+            else {
+                addToList({ 'key': props.location.Key, 'name': props.location.LocalizedName })
+            }
         }
 
-        //
         return (
 
             <div>
@@ -51,11 +59,13 @@ function PlaceWeather(props) {
                                     <span style={{ width: '30%' }}>
                                         <h4>{props.location.LocalizedName}</h4>
 
-                                        <h5>{currentUnit === "c" ? props.temp.Temperature.Metric.Value : props.temp.Temperature.Imperial.Value} </h5>
+                                        <h5>{!isfahrenheit? props.temp.Temperature.Metric.Value : props.temp.Temperature.Imperial.Value} </h5>
                                     </span>
                                     <span style={{ width: '30%', alignSelf: 'center' }}>
-                                        <IconButton color="secondary" onClick={() => { addToFavorites() }}  >
-                                            <FavoriteIcon style={{ width: '2.3rem', height: '2.3rem' }} />
+                                        <IconButton color="secondary" onClick={() => { toggleFavorites() }}  >
+                                            {isOnFavorite ? <FavoriteIcon style={{ width: '2.3rem', height: '2.3rem' }} /> : <FavoriteBorderIcon style={{ width: '2.3rem', height: '2.3rem' }} />}
+                                            {/* <FavoriteBorderIcon style={{ width: '2.3rem', height: '2.3rem' }} /> */}
+
                                         </IconButton>
                                     </span>
                                 </div>
@@ -66,7 +76,6 @@ function PlaceWeather(props) {
                         <tr >
                             <td colSpan='5' style={{ textAlign: 'center' }}>
                                 <h1 style={{ marginBottom: '20px', marginTop: '0px' }}>{props.temp.WeatherText}</h1>
-
                             </td>
                         </tr>
                         <tr>
@@ -74,7 +83,6 @@ function PlaceWeather(props) {
                         </tr>
                     </tbody>
                 </table>
-
             </div>
         );
 
@@ -86,7 +94,4 @@ function PlaceWeather(props) {
     }
 }
 
-export default connect(
-    null,
-    mapDispatchToProps
-)(PlaceWeather);
+export default PlaceWeather;

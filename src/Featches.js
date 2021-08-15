@@ -1,4 +1,4 @@
-const ProvidedKey = "gCKwGUg7qfGSlIp7CqVmhRBhcoAAfbs8";
+const ProvidedKey = "PPnGsGhA3ETXd07a3gLfDkDay7RJPumj";
 
 
 export async function fetchAutocompleteSearch(location) {
